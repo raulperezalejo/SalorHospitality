@@ -19,6 +19,15 @@ class CustomersController < ApplicationController
       wants.csv
     end
   end
+  
+  def show
+    @customer = Customer.find_by_id(params[:id])
+    orders = Order.where(:customer_id => params[:id])
+    @articles = []
+    orders.each do |o|
+      @articles << Article.find_by_id(Item.where(:order_id => o.id).first.article_id)
+    end
+  end
 
   def new
     if defined?(ShSaas) == 'constant'

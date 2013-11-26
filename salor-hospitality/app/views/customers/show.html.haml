@@ -1,0 +1,92 @@
+%h2= (t '.show_customer')
+
+- if @customer.errors.any?
+  .errors
+    %h3= t 'activerecord.errors.template.header', :count => @customer.errors.size, :model => Customer.model_name.human
+    %ul
+      - @customer.errors.full_messages.each do |msg|
+        %li= msg
+
+-#= form_for @customer do |f|
+-#  = submit_tag( controller.action_name == 'new' ? (t :create) : (t :edit) )
+-#  .floatright= link_to(t('various.cancel'), customers_path, :class => 'links')
+-#  .clear
+%div
+  %br
+  = label_tag :email
+  = @customer.email
+  -#TODO no shure what is this for.....
+  -#%br
+  -#= label_tag :password
+  -#= @customer.password
+  %br
+  = label_tag :prefered_table
+  = Table.find_by_id(@customer.default_table_id).name
+  %br
+  = label_tag :language
+  = @customer.language#, SalorHospitality::Application::LANGUAGES.invert.to_a
+  %br
+  = label_tag :first_name
+  = @customer.first_name
+  %br
+  = label_tag :last_name
+  = @customer.last_name
+  %br
+  = label_tag :company_name
+  = @customer.company_name
+  %br
+  = label_tag :address
+  = @customer.address
+  %br
+  = label_tag :city
+  = @customer.city
+  %br
+  = label_tag :state
+  = @customer.state
+  %br
+  = label_tag :country
+  = @customer.country
+  %br
+  = label_tag :postalcode
+  = @customer.postalcode
+  %br
+  = label_tag :m_number
+  = @customer.m_number
+  %br
+  = label_tag :telephone
+  = @customer.telephone
+  %br
+  = label_tag :cellphone
+  = @customer.cellphone
+  -#%br
+  -#= label_tag :tax_info
+  -#= @customer.tax_info
+-#
+-#:javascript
+-#  $(function() {
+-#    if ($('#customer_password').val().length == 0)
+-#      $('#customer_password').val(generate_password(8));
+-#  }
+
+-#
+%table.settlements.statistics
+  %tr
+    %th.bb= Article.model_name.human
+    %th.bb= t :count
+  - @articles.flatten.uniq.each do |article|
+    - sold_quantity = @current_vendor.items.existing.where(:refunded => nil, :article_id => article.id).sum(:count)
+    - next if sold_quantity.zero?
+    %tr
+      %td= article.name
+      %td= sold_quantity
+-#
+-#%table.settlements.statistics
+-#  %tr
+-#    %th.bb= Quantity.model_name.human
+-#    %th.bb= t :count
+-#  - @quantities.each do |quantity|
+-#    - sold_quantity = @current_vendor.items.existing.where(:refunded => nil, :quantity_id => quantity.id, :created_at => @from..@to, :user_id => @uids, :cost_center_id => @csids).sum(:count)
+-#    - next if sold_quantity.zero?
+-#    %tr
+-#      %td== #{ quantity.prefix } #{ quantity.article.name } #{ quantity.postfix }
+-#      %td= sold_quantity
